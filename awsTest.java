@@ -78,7 +78,8 @@ public class awsTest {
             System.out.println("  3. start instance               4. available regions      ");
             System.out.println("  5. stop instance                6. create instance        ");
             System.out.println("  7. reboot instance              8. list images            ");
-            System.out.println("  9. condor_status               99. quit                   ");
+            System.out.println("  9. condor_status               10. condor_q               ");
+            System.out.println("                                 99. quit                   ");
             System.out.println("------------------------------------------------------------");
 
             System.out.print("Enter an integer: ");
@@ -149,6 +150,10 @@ public class awsTest {
 
                 case 9:
                     condorStatus();
+                    break;
+
+                case 10:
+                    condorQ();
                     break;
 
                 case 99:
@@ -370,5 +375,28 @@ public class awsTest {
          }
 
 
+    }
+
+
+    public static void condorQ() {
+        String sshCommand = "ssh -i \"~/cloud-project.pem\" ec2-user@ec2-16-170-159-201.eu-north-1.compute.amazonaws.com condor_q";
+
+        try {
+                Process process = new ProcessBuilder("/bin/bash", "-c", sshCommand).start();
+
+                InputStream inputStream = process.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    System.out.println(line);
+                }
+
+                int exitCode = process.waitFor();
+
+
+        }
+        catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
