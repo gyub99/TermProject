@@ -156,6 +156,10 @@ public class awsTest {
                     condorQ();
                     break;
 
+                case 11:
+                    jobSubmit();
+                    break;
+
                 case 99:
                     System.out.println("bye!");
                     menu.close();
@@ -398,5 +402,26 @@ public class awsTest {
         catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void jobSubmit() {
+            String sshCommand = "ssh -i \"~/cloud-project.pem\" ec2-user@ec2-16-170-159-201.eu-north-1.compute.amazonaws.com condor_submit argument.jds";
+
+            try {
+                   Process process = new ProcessBuilder("/bin/bash", "-c", sshCommand).start();
+
+                   InputStream inputStream = process.getInputStream();
+                   BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                   String line;
+                   while ((line = reader.readLine()) != null) {
+                       System.out.println(line);
+                   }
+
+                   int exitCode = process.waitFor();
+
+            }
+            catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
     }
 }
