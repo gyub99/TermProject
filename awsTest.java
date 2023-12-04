@@ -7,6 +7,10 @@
  */
 import java.util.Iterator;
 import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.auth.profile.ProfileCredentialsProvider;
@@ -347,6 +351,23 @@ public class awsTest {
 
     public static void condorStatus() {
 
+        String sshCommand = "ssh -i \"~/cloud-project.pem\" ec2-user@ec2-16-170-159-201.eu-north-1.compute.amazonaws.com condor_status";
+
+         try {
+                 Process process = new ProcessBuilder("/bin/bash", "-c", sshCommand).start();
+
+             InputStream inputStream = process.getInputStream();
+             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+             String line;
+             while ((line = reader.readLine()) != null) {
+             System.out.println(line);
+             }
+
+             int exitCode = process.waitFor();
+
+         } catch (IOException | InterruptedException e) {
+             e.printStackTrace();
+         }
 
 
     }
